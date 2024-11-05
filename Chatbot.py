@@ -4,6 +4,7 @@ import streamlit as st
 import openai
 import os
 
+# Définir la clé API OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 file_path = "Recap_CA_tabule_VF.csv"
@@ -74,15 +75,12 @@ def ask_llm_with_data(question):
 
 # Interface utilisateur avec Streamlit
 st.title("Chatbot d'Analyse de Données")
-question = st.text_input("Posez une question :")
+st.write("Posez vos questions sur les performances commerciales et les produits d'assurance")
 
-if question:
-    try:
-        response = ask_llm_with_data(question)
-        st.write("Réponse du chatbot :", response)
-    except Exception as e:
-        st.write(f"An error occurred: {e}")
+# Champ de texte pour poser la question
+question = st.text_input("Votre question:")
 
+# Fonction de routage
 def route_question(question):
     """
     Fonction de routage qui vérifie d'abord les réponses pré-définies, puis envoie au LLM si nécessaire.
@@ -92,13 +90,6 @@ def route_question(question):
         return predefined_response
     else:
         return ask_llm_with_data(question)
-
-# Interface utilisateur avec Streamlit pour la deuxième section
-st.title("Chatbot Hybride pour la Direction Générale")
-st.write("Posez vos questions sur les performances commerciales et les produits d'assurance")
-
-# Champ de texte pour poser la question
-question = st.text_input("Votre question:", key="general_question")
 
 # Afficher la réponse si une question est posée
 if question:
