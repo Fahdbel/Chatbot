@@ -32,13 +32,12 @@ def get_predefined_response(question):
     return None
 
 
-def ask_llm(question):
+def ask_llm(question, max_tokens=50):  # You can adjust max_tokens as needed
     try:
-        # Using the `gpt-3.5-turbo` model
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": question}],
-            max_tokens=100,
+            max_tokens=max_tokens,
             temperature=0.7
         )
         return response.choices[0].message["content"].strip()
