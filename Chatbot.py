@@ -41,15 +41,15 @@ def get_predefined_response(question):
 def ask_llm_with_data(question):
     # Analyse basique de la question pour identifier l'année ou la métrique concernée
     if "2021" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021"]].head(5).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021"]].head(100).to_dict()
     elif "2022" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2022"]].head(5).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2022"]].head(100).to_dict()
     elif "2023" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2023"]].head(5).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2023"]].head(100).to_dict()
     elif "2024" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2024"]].head(5).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2024"]].head(100).to_dict()
     else:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021", "DIM_2022", "DIM_2023", "DIM_2024"]].head(5).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021", "DIM_2022", "DIM_2023", "DIM_2024"]].head(100).to_dict()
 
     # Créer le prompt
     prompt = (
