@@ -4,7 +4,7 @@ import streamlit as st
 import openai
 
 
-openai.api_key = "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"
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 
 
@@ -41,7 +41,7 @@ def ask_llm(question):
         )
         return response.choices[0].text.strip()
     except Exception as e:
-        print(f"Detailed error: {e}")
+        print(f"Error occurred: {e}")
         return f"An error occurred while fetching the response: {e}"
 
 
