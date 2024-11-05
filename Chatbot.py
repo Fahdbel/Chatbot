@@ -33,16 +33,17 @@ def get_predefined_response(question):
 
 def ask_llm(question):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Ensure you have access to this model
-            messages=[{"role": "user", "content": question}],
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=question,
             max_tokens=100,
             temperature=0.7
         )
-        return response.choices[0].message["content"].strip()
+        return response.choices[0].text.strip()
     except Exception as e:
         print(f"Detailed error: {e}")
         return f"An error occurred while fetching the response: {e}"
+
 
 
 def route_question(question):
