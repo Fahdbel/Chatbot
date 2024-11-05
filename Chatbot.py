@@ -10,7 +10,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 file_path = "Recap_CA_tabule_VF.csv"
 try:
     # Ignorer la première ligne pour utiliser la deuxième comme en-tête
-    df = pd.read_csv(file_path, skiprows=1)
+    df = pd.read_csv(file_path, skiprows=1, header=0)
 except FileNotFoundError:
     st.error(f"Le fichier {file_path} n'a pas été trouvé.")
     st.stop()
