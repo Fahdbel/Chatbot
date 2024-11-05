@@ -32,18 +32,28 @@ def get_predefined_response(question):
     return None
 
 
-def ask_llm(question, max_tokens=50):  # You can adjust max_tokens as needed
+import openai
+import streamlit as st
+
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+def ask_llm(question):
     try:
+        prompt = (
+            f"Voici les données de vente par intermédiaire pour les années 2021, 2022, et 2023. "
+            f"Les données sont les suivantes : {df.head(5).to_dict()} "  # Limiter pour un prompt concis
+            f"Répondez précisément à la question en fonction de ces données : {question}"
+        )
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": question}],
-            max_tokens=max_tokens,
-            temperature=0.7
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=150,
+            temperature=0.3
         )
         return response.choices[0].message["content"].strip()
     except Exception as e:
-        print(f"Error occurred: {e}")
-        return f"An error occurred while fetching the response: {e}"
+        return f"An error occurred: {e}"
+
 
 
 
