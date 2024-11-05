@@ -41,19 +41,19 @@ def get_predefined_response(question):
 def ask_llm_with_data(question):
     # Analyse basique de la question pour identifier l'année ou la métrique concernée
     if "2021" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021"]].head(635).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021"]].head(50).to_dict()  # Limite à 50 lignes
     elif "2022" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2022"]].head(635).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2022"]].head(50).to_dict()
     elif "2023" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2023"]].head(635).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2023"]].head(50).to_dict()
     elif "2024" in question:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2024"]].head(635).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2024"]].head(50).to_dict()
     else:
-        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021", "DIM_2022", "DIM_2023", "DIM_2024"]].head(635).to_dict()
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "DIM_2021", "DIM_2022", "DIM_2023", "DIM_2024"]].head(50).to_dict()
 
-    # Créer le prompt
+    # Créer le prompt réduit
     prompt = (
-        f"Voici les données de vente par intermédiaire pour l'année concernée :\n"
+        f"Voici un extrait des données de vente par intermédiaire pour l'année concernée :\n"
         f"{filtered_data}\n"
         f"Répondez précisément à la question suivante en fonction de ces données : {question}"
     )
@@ -63,12 +63,13 @@ def ask_llm_with_data(question):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=30000,
+            max_tokens=1500,  # Réduit à 1500 tokens
             temperature=0.3
         )
         return response.choices[0].message["content"].strip()
     except Exception as e:
         return f"An error occurred: {e}"
+
 
 def route_question(question):
     """
