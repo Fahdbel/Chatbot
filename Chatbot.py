@@ -32,15 +32,17 @@ def get_predefined_response(question):
 
 
 def ask_llm(question):
-    """
-    Fonction pour interroger le LLM d'OpenAI si aucune réponse pré-définie n'est trouvée.
-    """
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=question,
-        max_tokens=100
-    )
-    return response.choices[0].text.strip()
+    try:
+        response = openai.Completion.create(
+            model="text-davinci-003",  # Ensure you're using the correct model
+            prompt=question,
+            max_tokens=100,
+            temperature=0.7
+        )
+        return response.choices[0].text.strip()
+    except Exception as e:
+        print("Error:", e)
+        return "An error occurred while fetching the response."
 
 
 def route_question(question):
