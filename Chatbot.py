@@ -4,7 +4,7 @@ import streamlit as st
 import openai
 
 
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 
