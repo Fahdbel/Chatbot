@@ -7,7 +7,12 @@ import os
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-
+file_path = "Recap_CA_tabule_VF.csv"
+try:
+    df = pd.read_csv(file_path)
+except FileNotFoundError:
+    st.error(f"Le fichier {file_path} n'a pas été trouvé.")
+    st.stop()
 
 # #### Base de connaissances avec réponses pré-définies
 
@@ -37,13 +42,32 @@ import streamlit as st
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-def ask_llm(question):
+
+def ask_llm_with_data(question):
+    # Analyse basique de la question pour identifier l'année ou la métrique concernée
+    if "2021" in question:
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "Total_2021"]].head(5).to_dict()
+        year = "2021"
+    elif "2022" in question:
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "Total_2022"]].head(5).to_dict()
+        year = "2022"
+    elif "2023" in question:
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "Total_2023"]].head(5).to_dict()
+        year = "2023"
+    else:
+        # Par défaut, donner un résumé de toutes les années
+        filtered_data = df[["TYPE_INTERMEDIAIRE", "Total_2021", "Total_2022", "Total_2023"]].head(5).to_dict()
+        year = "2021-2023"
+
+    # Créer le prompt avec un résumé des données pertinentes
+    prompt = (
+        f"Voici les données de vente par intermédiaire pour l'année {year} :\n"
+        f"{filtered_data}\n"
+        f"Répondez précisément à la question suivante en fonction de ces données : {question}"
+    )
+
+    # Interroger le LLM avec les données sélectionnées
     try:
-        prompt = (
-            f"Voici les données de vente par intermédiaire pour les années 2021, 2022, et 2023. "
-            f"Les données sont les suivantes : {df.head(5).to_dict()} "  # Limiter pour un prompt concis
-            f"Répondez précisément à la question en fonction de ces données : {question}"
-        )
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
@@ -54,7 +78,16 @@ def ask_llm(question):
     except Exception as e:
         return f"An error occurred: {e}"
 
+# Interface utilisateur avec Streamlit
+st.title("Chatbot d'Analyse de Données")
+question = st.text_input("Posez une question :")
 
+if question:
+    try:
+        response = ask_llm_with_data(question)
+        st.write("Réponse du chatbot :", response)
+    except Exception as e:
+        st.write(f"An error occurred: {e}")
 
 
 def route_question(question):
