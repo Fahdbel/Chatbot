@@ -37,12 +37,6 @@ def get_predefined_response(question):
     return None
 
 
-import openai
-import streamlit as st
-
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-
-
 def ask_llm_with_data(question):
     # Analyse basique de la question pour identifier l'année ou la métrique concernée
     if "2021" in question:
