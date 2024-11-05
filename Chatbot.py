@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import openai
+import os
 
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 
@@ -33,13 +34,14 @@ def get_predefined_response(question):
 
 def ask_llm(question):
     try:
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=question,
+        # Using the `gpt-3.5-turbo` model
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": question}],
             max_tokens=100,
             temperature=0.7
         )
-        return response.choices[0].text.strip()
+        return response.choices[0].message["content"].strip()
     except Exception as e:
         print(f"Error occurred: {e}")
         return f"An error occurred while fetching the response: {e}"
