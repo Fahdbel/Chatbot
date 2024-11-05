@@ -34,16 +34,15 @@ def get_predefined_response(question):
 def ask_llm(question):
     try:
         response = openai.Completion.create(
-            model="text-davinci-003",  # Ensure you're using the correct model
+            model="text-davinci-003",  # or the correct model you are using
             prompt=question,
             max_tokens=100,
             temperature=0.7
         )
         return response.choices[0].text.strip()
     except Exception as e:
-        print("Error:", e)
+        print(f"Error occurred: {e}")  # This will print detailed error information to the Streamlit logs
         return "An error occurred while fetching the response."
-
 
 def route_question(question):
     """
