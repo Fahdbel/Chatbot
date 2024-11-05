@@ -10,7 +10,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # Chargement du fichier CSV avec un délimiteur spécifique
 file_path = "Recap_CA_tabule_VF.csv"
 try:
-    df = pd.read_csv(file_path, header=1, delimiter=';')  # Ajouter delimiter=';' si le fichier utilise des points-virgules
+    df = pd.read_csv(file_path, header=1, delimiter=';', index_col = 0)  # Ajouter delimiter=';' si le fichier utilise des points-virgules
     df.columns = df.columns.str.strip()  # Supprime les espaces autour des noms de colonnes
     st.write("Colonnes du DataFrame:", df.columns)  # Affiche les colonnes pour vérification
 except FileNotFoundError:
